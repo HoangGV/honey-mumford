@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khảo Sát Phong Cách Học Tập Honey & Mumford (LSQ)</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+      --shadow-lg: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 90px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* Header */
+    .survey-header {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .survey-badge {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .survey-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .survey-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 760px;
+      margin: 0 auto 16px auto;
+    }
+
+    .survey-guide {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 14px;
+      color: #334155;
+      display: inline-block;
+      text-align: left;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 4px 8px;
+    }
+    .btn-text:hover {
+      text-decoration: underline;
+    }
+
+    /* Question Item */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .question-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .question-card:hover {
+      border-color: var(--border-focus);
+      background: #fafafa;
+    }
+
+    .question-card.active {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .q-number {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: #f1f5f9;
+      padding: 4px 8px;
+      border-radius: 6px;
+      min-width: 38px;
+      text-align: center;
+      margin-top: 1px;
+    }
+
+    .question-card.active .q-number {
+      background: #dbeafe;
+      color: var(--primary);
+    }
+
+    .q-text {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .q-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .q-checkbox::before {
+      content: "";
+      width: 10px;
+      height: 6px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) scale(0);
+      transition: transform 0.15s ease-in-out;
+      margin-top: -2px;
+    }
+
+    .q-checkbox:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .q-checkbox:checked::before {
+      transform: rotate(-45deg) scale(1);
+    }
+
+    /* Sticky Bottom Bar */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-info {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .progress-info span {
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Modal / Result View */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      overflow-y: auto;
+      padding: 24px 16px;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 860px;
+      margin: 20px auto;
+      box-shadow: var(--shadow-lg);
+      padding: 32px;
+      position: relative;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .btn-close {
+      background: #f1f5f9;
+      border: none;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    .btn-close:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    /* Top Dominant Banner */
+    .dominant-banner {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .dominant-banner .label {
+      font-size: 13px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+
+    .dominant-banner .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin: 4px 0 8px 0;
+    }
+
+    .dominant-banner .desc {
+      font-size: 14px;
+      color: #334155;
+    }
+
+    /* Grid Score Cards */
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .score-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .score-card.dominant {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .score-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+
+    .score-card .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .score-card .score-max {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .level-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .level-very-strong { background: #dcfce7; color: #15803d; }
+    .level-strong { background: #e0f2fe; color: #0369a1; }
+    .level-moderate { background: #fef3c7; color: #b45309; }
+    .level-low { background: #f1f5f9; color: #64748b; }
+    .level-very-low { background: #fee2e2; color: #b91c1c; }
+
+    /* Chart & Details */
+    .analysis-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .analysis-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chart-box h4 {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .details-box {
+      font-size: 14px;
+    }
+
+    .style-detail-item {
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .style-detail-item:last-child {
+      border-bottom: none;
+    }
+    .style-detail-item strong {
+      color: #0f172a;
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    /* Modal Actions */
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    /* Print support */
+    @media print {
+      body {
+        padding-bottom: 0;
+        background: #ffffff;
+      }
+      .survey-header, .questions-list, .controls-bar, .sticky-footer {
+        display: none !important;
+      }
+      .modal-backdrop {
+        position: static;
+        background: transparent;
+        padding: 0;
+        display: block !important;
+      }
+      .modal-content {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+      }
+      .modal-actions, .btn-close {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="survey-header">
+      <div class="survey-badge">Công cụ Đánh giá Tâm lý & Sư phạm</div>
+      <h1>Bảng Khảo Sát Phong Cách Học Tập Honey & Mumford (LSQ)</h1>
+      <p>
+        Bảng hỏi gồm 80 câu phát biểu giúp bạn nhận diện chính xác phong cách học tập sở trường theo mô hình Peter Honey & Alan Mumford: 
+        <strong>Hành động (Activist)</strong>, <strong>Suy ngẫm (Reflector)</strong>, <strong>Lý thuyết (Theorist)</strong> và <strong>Thực tế (Pragmatist)</strong>.
+      </p>
+      <div class="survey-guide">
+        💡 <strong>Hướng dẫn:</strong> Đọc từng phát biểu và <strong>tích chọn</strong> vào ô nếu bạn thấy câu đó đúng với bản thân mình nhiều hơn là không đúng. Nếu không đồng ý, hãy bỏ trống. Không có câu trả lời đúng hay sai.
+      </div>
+    </header>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <span>Danh sách 80 câu hỏi tự lượng giá:</span>
+      <button class="btn-text" id="btn-reset" type="button">Đặt lại lựa chọn</button>
+    </div>
+
+    <!-- Questions Form -->
+    <form id="lsq-form">
+      <div class="questions-list" id="questions-container">
+        <!-- Rendered by JS -->
+      </div>
+    </form>
+  </div>
+
+  <!-- Sticky Bottom Submit Bar -->
+  <aside class="sticky-footer">
+    <div class="footer-inner">
+      <div class="progress-info">
+        Đã chọn: <span id="selected-count">0</span> / 80 câu
+      </div>
+      <button class="btn-submit" id="btn-submit" type="button">Hoàn thành & Xem kết quả</button>
+    </div>
+  </aside>
+
+  <!-- Result Modal View -->
+  <div class="modal-backdrop" id="result-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Kết Quả Phân Tích Phong Cách Học Tập</h2>
+        <button class="btn-close" id="btn-close-modal" type="button" aria-label="Đóng">&times;</button>
+      </div>
+
+      <!-- Dominant Style Banner -->
+      <div class="dominant-banner" id="dominant-banner">
+        <div class="label">Phong cách nổi trội nhất của bạn</div>
+        <div class="title" id="dominant-title">Đang tính toán...</div>
+        <div class="desc" id="dominant-desc">Mô tả tóm tắt...</div>
+      </div>
+
+      <!-- 4 Scores Grid -->
+      <div class="score-grid" id="score-cards">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Chart and Detailed Description -->
+      <div class="analysis-container">
+        <div class="chart-box">
+          <h4>Biểu đồ mạng nhện phong cách học tập</h4>
+          <canvas id="radarChart" width="300" height="300"></canvas>
+        </div>
+        <div class="details-box" id="detailed-breakdown">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" id="btn-print" type="button">🖨️ In / Lưu PDF</button>
+        <button class="btn-submit" id="btn-review" type="button">Xem lại các câu đã chọn</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 80 questions with accurate Honey & Mumford category mapping
+    const questionsData = [
+      { id: 1, type: "theorist", text: "Tôi có quan điểm rõ ràng và kiên định về điều gì là đúng - sai, tốt - xấu." },
+      { id: 2, type: "activist", text: "Tôi thường hành động liều lĩnh, sẵn sàng chấp nhận mạo hiểm mà không quá e dè." },
+      { id: 3, type: "theorist", text: "Tôi có xu hướng giải quyết vấn đề theo từng bước một cách bài bản, tránh những ý tưởng viển vông xa vời." },
+      { id: 4, type: "activist", text: "Tôi tin rằng các quy trình và thủ tục hành chính nghiêm ngặt chỉ làm gò bó, cản trở con người." },
+      { id: 5, type: "pragmatist", text: "Tôi có tiếng là người thẳng thắn, thực tế, luôn 'gọi đúng tên sự vật' và không thích vòng vo." },
+      { id: 6, type: "activist", text: "Tôi thường nhận thấy những quyết định dựa trên 'trực giác/linh cảm' cũng chuẩn xác như những quyết định sau khi suy xét, phân tích kỹ lưỡng." },
+      { id: 7, type: "reflector", text: "Tôi thích làm những công việc cho phép tôi có đủ thời gian tìm hiểu cặn kẽ mọi ngóc ngách, không bỏ sót điều gì." },
+      { id: 8, type: "theorist", text: "Tôi thường xuyên đặt câu hỏi và xem xét lại những giả định căn bản của người khác." },
+      { id: 9, type: "pragmatist", text: "Điều cốt lõi và quan trọng nhất với tôi là liệu một phương án có phát huy hiệu quả trong thực tế hay không." },
+      { id: 10, type: "activist", text: "Tôi luôn chủ động tìm kiếm những trải nghiệm mới mẻ." },
+      { id: 11, type: "pragmatist", text: "Khi nghe về một ý tưởng mới, tôi lập tức nghĩ ngay đến cách áp dụng nó vào công việc thực tế." },
+      { id: 12, type: "theorist", text: "Tôi rất coi trọng tính kỷ luật tự giác, chẳng hạn như ăn uống khoa học, tập thể dục đều đặn và duy trì lối sống nề nếp." },
+      { id: 13, type: "reflector", text: "Tôi luôn tự hào về việc hoàn thành công việc một cách thấu đáo, trọn vẹn và cẩn thận." },
+      { id: 14, type: "theorist", text: "Tôi làm việc hòa hợp nhất với những người có tư duy logic và khó chịu với những ai bốc đồng, thiếu lý trí." },
+      { id: 15, type: "reflector", text: "Tôi rất cẩn trọng khi giải thích, phân tích các dữ liệu có sẵn và tuyệt đối tránh việc vội vàng quy chụp kết luận." },
+      { id: 16, type: "reflector", text: "Tôi thích đưa ra quyết định một cách cẩn trọng sau khi đã cân nhắc kỹ nhiều phương án thay thế." },
+      { id: 17, type: "activist", text: "Tôi thường bị thu hút bởi những ý tưởng độc lạ, mới mẻ hơn là những ý tưởng thuần túy mang tính thực tế." },
+      { id: 18, type: "theorist", text: "Tôi không thích những điều mơ hồ, dở dang; tôi muốn mọi thứ phải được sắp xếp vào một hệ thống logic, mạch lạc." },
+      { id: 19, type: "pragmatist", text: "Tôi sẵn sàng chấp nhận và tuân thủ các quy định, chính sách miễn là chúng giúp công việc được tiến hành hiệu quả." },
+      { id: 20, type: "theorist", text: "Tôi thích liên hệ các hành động thực tế của mình với các nguyên tắc, quy luật nền tảng." },
+      { id: 21, type: "pragmatist", text: "Trong các cuộc thảo luận, tôi thích đi thẳng vào trọng tâm vấn đề." },
+      { id: 22, type: "theorist", text: "Tôi có xu hướng giữ các mối quan hệ đồng nghiệp ở mức chừng mực, lịch sự và mang tính công việc." },
+      { id: 23, type: "activist", text: "Tôi cảm thấy tràn đầy năng lượng và hứng khởi trước thử thách giải quyết một việc mới lạ, khác biệt." },
+      { id: 24, type: "activist", text: "Tôi thích kết giao và làm việc cùng những người vui vẻ, hoạt bát và giàu tính ngẫu hứng." },
+      { id: 25, type: "reflector", text: "Tôi luôn chú ý tỉ mỉ đến từng chi tiết nhỏ trước khi bắt tay vào một công việc mới." },
+      { id: 26, type: "theorist", text: "Tôi thấy rất khó để có thể tự dưng nghĩ ra những ý tưởng bộc phát, ngẫu hứng hay 'điên rồ' ngay tại chỗ." },
+      { id: 27, type: "pragmatist", text: "Tôi không thích lãng phí thời gian vào những lời nói quanh co, nói bóng gió không cần thiết." },
+      { id: 28, type: "reflector", text: "Tôi luôn thận trọng để không vội vã đưa ra phán đoán hay kết luận quá sớm." },
+      { id: 29, type: "reflector", text: "Tôi thích thu thập càng nhiều nguồn thông tin càng tốt – càng nhiều dữ liệu để nghiền ngẫm thì kết quả càng tốt." },
+      { id: 30, type: "theorist", text: "Những người cợt nhả, bông đùa không đúng lúc hoặc thiếu nghiêm túc thường khiến tôi bực mình." },
+      { id: 31, type: "reflector", text: "Tôi luôn chăm chú lắng nghe quan điểm của người khác trước khi trình bày ý kiến của riêng mình." },
+      { id: 32, type: "activist", text: "Tôi có xu hướng cởi mở và bộc lộ thẳng thắn những cảm xúc bên trong của mình." },
+      { id: 33, type: "reflector", text: "Trong các cuộc thảo luận, tôi thích quan sát cử chỉ, thái độ và sự tương tác giữa những người tham gia." },
+      { id: 34, type: "activist", text: "Tôi thích phản ứng linh hoạt, tùy cơ ứng biến trước sự việc hơn là lên kế hoạch chi tiết từ trước." },
+      { id: 35, type: "pragmatist", text: "Tôi thường hứng thú với các công cụ kỹ thuật như sơ đồ quy trình, phân tích công việc hay lập kế hoạch dự phòng." },
+      { id: 36, type: "reflector", text: "Tôi cảm thấy lo lắng và áp lực nếu phải hoàn thành công việc một cách gấp gáp để kịp hạn chót ngặt nghèo." },
+      { id: 37, type: "pragmatist", text: "Tôi có xu hướng đánh giá các ý tưởng dựa trên giá trị sử dụng và tính khả thi trong thực tế." },
+      { id: 38, type: "activist", text: "Những người quá trầm lặng, kín tiếng và suy tư thường khiến tôi cảm thấy không thoải mái." },
+      { id: 39, type: "reflector", text: "Những người lúc nào cũng hấp tấp lao ngay vào hành động mà không suy nghĩ kỹ thường khiến tôi khó chịu." },
+      { id: 40, type: "activist", text: "Tận hưởng trọn vẹn khoảnh khắc hiện tại quan trọng hơn nhiều so với việc mải suy ngẫm về quá khứ hay lo xa về tương lai." },
+      { id: 41, type: "reflector", text: "Tôi tin rằng những quyết định dựa trên việc phân tích thấu đáo mọi thông tin sẽ vững chắc hơn quyết định dựa vào trực giác." },
+      { id: 42, type: "theorist", text: "Tôi có xu hướng là một người theo chủ nghĩa cầu toàn (perfectionist)." },
+      { id: 43, type: "activist", text: "Trong các cuộc thảo luận, tôi thường nhanh chóng đưa ra hàng loạt ý tưởng bất chợt nảy sinh trong đầu." },
+      { id: 44, type: "pragmatist", text: "Trong các cuộc họp, tôi luôn đóng góp những ý tưởng thiết thực, sát với thực tế đời sống." },
+      { id: 45, type: "activist", text: "Quy tắc sinh ra phần lớn là để bị phá vỡ hoặc để điều chỉnh linh hoạt." },
+      { id: 46, type: "reflector", text: "Tôi thích lùi lại một bước để quan sát toàn diện tình huống và xem xét từ nhiều góc nhìn khác nhau." },
+      { id: 47, type: "theorist", text: "Tôi rất nhạy bén trong việc chỉ ra những mâu thuẫn, thiếu sót và sơ hở trong lập luận của người khác." },
+      { id: 48, type: "activist", text: "Nhìn chung, tôi nói nhiều hơn là lắng nghe." },
+      { id: 49, type: "pragmatist", text: "Tôi thường nhìn ra những cách làm thực tế và tối ưu hơn để hoàn thành công việc." },
+      { id: 50, type: "pragmatist", text: "Tôi cho rằng các bản báo cáo nên được trình bày ngắn gọn, đanh thép và đi thẳng vào trọng tâm." },
+      { id: 51, type: "theorist", text: "Tôi tin rằng tư duy duy lý và phương pháp suy luận logic phải luôn là yếu tố dẫn đường." },
+      { id: 52, type: "reflector", text: "Tôi thích thảo luận về những việc cụ thể, có chiều sâu hơn là tham gia vào những cuộc trò chuyện xã giao vô thưởng vô phạt." },
+      { id: 53, type: "pragmatist", text: "Tôi có thiện cảm với những người thực tế, biết nhìn nhận mọi việc một cách khách quan, 'chân chạm đất'." },
+      { id: 54, type: "pragmatist", text: "Trong thảo luận, tôi rất mất kiên nhẫn với những ý kiến rườm rà, lạc đề và đánh lạc hướng mục tiêu chính." },
+      { id: 55, type: "reflector", text: "Khi viết một bản báo cáo, tôi có xu hướng viết nháp và sửa đi sửa lại nhiều lần trước khi thống nhất bản cuối." },
+      { id: 56, type: "pragmatist", text: "Tôi rất hào hứng thử nghiệm trực tiếp các giải pháp để xem liệu chúng có thực sự hiệu quả." },
+      { id: 57, type: "theorist", text: "Tôi luôn kiên trì tìm kiếm câu trả lời thông qua phương pháp tiếp cận logic và có hệ thống." },
+      { id: 58, type: "activist", text: "Tôi thích là người nói nhiều và tạo không khí sôi nổi trong các cuộc hội thoại." },
+      { id: 59, type: "pragmatist", text: "Trong thảo luận, tôi thường là người thực tế, nhắc nhở mọi người bám sát trọng tâm và tránh mơ mộng viển vông." },
+      { id: 60, type: "reflector", text: "Tôi thích cân nhắc kỹ càng nhiều khả năng và lựa chọn khác nhau trước khi đưa ra quyết định." },
+      { id: 61, type: "theorist", text: "Khi tranh luận, tôi thường là người giữ được sự điềm tĩnh, khách quan và ít bị cảm xúc lấn át nhất." },
+      { id: 62, type: "reflector", text: "Trong thảo luận tập thể, tôi thích giữ vai trò quan sát, ít nói hơn là đứng lên dẫn dắt cuộc đối thoại." },
+      { id: 63, type: "theorist", text: "Tôi thích kết nối hành động cụ thể trước mắt với tầm nhìn dài hạn và bức tranh toàn cảnh." },
+      { id: 64, type: "activist", text: "Khi gặp thất bại hay sai lầm, tôi thường dễ dàng bỏ qua và xem đó như một trải nghiệm để học hỏi." },
+      { id: 65, type: "pragmatist", text: "Tôi có xu hướng gạt bỏ những ý tưởng bay bổng, bộc phát vì thấy chúng thiếu tính thực tế." },
+      { id: 66, type: "reflector", text: "Tôi luôn tâm niệm phương châm 'cẩn tắc vô áy náy' hay 'phải nhìn kỹ trước khi bước'." },
+      { id: 67, type: "reflector", text: "Nhìn chung, tôi lắng nghe người khác nhiều hơn là chủ động phát biểu." },
+      { id: 68, type: "theorist", text: "Tôi có xu hướng khắt khe với những ai gặp khó khăn trong việc tư duy một cách logic, mạch lạc." },
+      { id: 69, type: "pragmatist", text: "Trong đa số trường hợp, tôi tin rằng kết quả cuối cùng đạt được sẽ biện minh cho phương tiện thực hiện." },
+      { id: 70, type: "pragmatist", text: "Tôi không ngại làm phật lòng ai đó, miễn sao mục tiêu công việc được hoàn thành đúng đắn." },
+      { id: 71, type: "activist", text: "Tôi cảm thấy sự gò bó của việc phải bám theo các mục tiêu và kế hoạch cứng nhắc là rất ngột ngạt." },
+      { id: 72, type: "activist", text: "Tôi thường là nhân tố khuấy động bầu không khí, mang lại niềm vui cho cả nhóm." },
+      { id: 73, type: "pragmatist", text: "Tôi sẵn sàng làm bất cứ điều gì cấp thiết và thực tế để hoàn thành trọn vẹn công việc." },
+      { id: 74, type: "activist", text: "Tôi rất nhanh cảm thấy chán nản với các công việc đòi hỏi sự tỉ mỉ, quy củ và lặp đi lặp lại." },
+      { id: 75, type: "theorist", text: "Tôi luôn hứng thú tìm hiểu các giả định, nguyên lý cốt lõi và hệ thống lý thuyết đằng sau các sự kiện." },
+      { id: 76, type: "reflector", text: "Tôi luôn thực sự quan tâm và muốn tìm hiểu xem người khác đang có suy nghĩ hay cảm nhận như thế nào." },
+      { id: 77, type: "theorist", text: "Tôi thích các cuộc họp diễn ra theo quy chuẩn, phương pháp bài bản và tuân thủ nghiêm ngặt chương trình nghị sự." },
+      { id: 78, type: "theorist", text: "Tôi thường chủ động tránh xa những chủ đề mang tính cảm tính chủ quan hoặc mập mờ, đa nghĩa." },
+      { id: 79, type: "activist", text: "Tôi thích sự kịch tính, dồn dập và cảm giác hưng phấn khi phải ứng phó với tình huống khủng hoảng bất ngờ." },
+      { id: 80, type: "pragmatist", text: "Mọi người đôi khi nhận xét tôi là người có phần lạnh lùng, ít để tâm đến cảm xúc của người khác." }
+    ];
+
+    // Style profile details and Honey & Mumford norm benchmarks
+    const styleProfiles = {
+      activist: {
+        name: "Hành động (Activist)",
+        shortDesc: "Bạn học tốt nhất qua trải nghiệm thực tế, thử thách mới, làm việc nhóm và các hoạt động sôi nổi, linh hoạt.",
+        strengths: "Nhiệt huyết, thích nghi nhanh, cởi mở với cái mới, không ngại mạo hiểm, dẫn dắt bầu không khí.",
+        bestLearning: "Thảo luận mở, giải quyết khủng hoảng, đóng vai (role-play), trò chơi kinh doanh, đổi mới liên tục.",
+        weaknesses: "Dễ chán với các công việc lặp lại, kế hoạch chi tiết, hoặc việc phải ngồi nghe thuyết giảng lý thuyết dài dòng.",
+        norms: [
+          { min: 13, max: 20, label: "Rất mạnh", class: "level-very-strong" },
+          { min: 11, max: 12, label: "Mạnh", class: "level-strong" },
+          { min: 7, max: 10, label: "Vừa phải", class: "level-moderate" },
+          { min: 4, max: 6, label: "Yếu", class: "level-low" },
+          { min: 0, max: 3, label: "Rất yếu", class: "level-very-low" }
+        ]
+      },
+      reflector: {
+        name: "Suy ngẫm (Reflector)",
+        shortDesc: "Bạn thích lùi lại quan sát, thu thập đa chiều dữ liệu, lắng nghe và cân nhắc thấu đáo trước khi kết luận.",
+        strengths: "Cẩn trọng, chu đáo, khả năng lắng nghe tuyệt vời, nhìn nhận vấn đề từ nhiều góc độ khách quan.",
+        bestLearning: "Tự nghiên cứu, quan sát người khác thực hiện, phân tích tài liệu, có thời gian chuẩn bị và suy ngẫm trước khi phát biểu.",
+        weaknesses: "Dễ do dự, thiếu quyết đoán khi bị ép phải đưa ra quyết định tức thì mà chưa có đủ thông tin.",
+        norms: [
+          { min: 18, max: 20, label: "Rất mạnh", class: "level-very-strong" },
+          { min: 15, max: 17, label: "Mạnh", class: "level-strong" },
+          { min: 12, max: 14, label: "Vừa phải", class: "level-moderate" },
+          { min: 9, max: 11, label: "Yếu", class: "level-low" },
+          { min: 0, max: 8, label: "Rất yếu", class: "level-very-low" }
+        ]
+      },
+      theorist: {
+        name: "Lý thuyết (Theorist)",
+        shortDesc: "Bạn tiếp thu tốt nhất khi thông tin được tổ chức thành các mô hình logic, nguyên lý khoa học và hệ thống chặt chẽ.",
+        strengths: "Tư duy phân tích sắc bén, logic, có tính kỷ luật cao, tìm ra nguyên nhân gốc rễ và bức tranh toàn cảnh.",
+        bestLearning: "Học từ các mô hình lý thuyết, đọc sách chuyên khảo, tham gia các buổi báo cáo có cấu trúc rõ ràng, đặt câu hỏi phản biện.",
+        weaknesses: "Khó chấp nhận sự mơ hồ, cảm tính hoặc những phương pháp chưa được chứng minh bằng luận cứ vững chắc.",
+        norms: [
+          { min: 16, max: 20, label: "Rất mạnh", class: "level-very-strong" },
+          { min: 14, max: 15, label: "Mạnh", class: "level-strong" },
+          { min: 11, max: 13, label: "Vừa phải", class: "level-moderate" },
+          { min: 8, max: 10, label: "Yếu", class: "level-low" },
+          { min: 0, max: 7, label: "Rất yếu", class: "level-very-low" }
+        ]
+      },
+      pragmatist: {
+        name: "Thực tế (Pragmatist)",
+        shortDesc: "Bạn luôn tìm kiếm tính ứng dụng thực tiễn của kiến thức: 'Liệu điều này có chạy được trong thực tế hay không?'.",
+        strengths: "Thực tế, định hướng kết quả cao, nhanh chóng biến ý tưởng thành hành động, giải quyết vấn đề hiệu quả.",
+        bestLearning: "Thực hành tại chỗ, case study thực tế, học kèm chuyên gia (coaching/mentoring), thử nghiệm công cụ làm việc ngay.",
+        weaknesses: "Mất kiên nhẫn với các buổi thảo luận mang tính triết lý hàn lâm xa rời thực tế hoặc không có giải pháp ngay.",
+        norms: [
+          { min: 17, max: 20, label: "Rất mạnh", class: "level-very-strong" },
+          { min: 15, max: 16, label: "Mạnh", class: "level-strong" },
+          { min: 12, max: 14, label: "Vừa phải", class: "level-moderate" },
+          { min: 9, max: 11, label: "Yếu", class: "level-low" },
+          { min: 0, max: 8, label: "Rất yếu", class: "level-very-low" }
+        ]
+      }
+    };
+
+    // Render 80 questions into the DOM
+    const container = document.getElementById("questions-container");
+    const countSpan = document.getElementById("selected-count");
+
+    questionsData.forEach(q => {
+      const card = document.createElement("div");
+      card.className = "question-card";
+      card.setAttribute("data-id", q.id);
+
+      const num = document.createElement("div");
+      num.className = "q-number";
+      num.textContent = q.id < 10 ? `0${q.id}` : q.id;
+
+      const text = document.createElement("div");
+      text.className = "q-text";
+      text.textContent = q.text;
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "q-checkbox";
+      checkbox.name = q.type;
+      checkbox.value = "1";
+      checkbox.id = `q-${q.id}`;
+
+      card.appendChild(num);
+      card.appendChild(text);
+      card.appendChild(checkbox);
+
+      // Toggle on whole card click
+      card.addEventListener("click", (e) => {
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+        }
+        card.classList.toggle("active", checkbox.checked);
+        updateCount();
+      });
+
+      checkbox.addEventListener("change", () => {
+        card.classList.toggle("active", checkbox.checked);
+        updateCount();
+      });
+
+      container.appendChild(card);
+    });
+
+    function updateCount() {
+      const totalChecked = document.querySelectorAll(".q-checkbox:checked").length;
+      countSpan.textContent = totalChecked;
+    }
+
+    // Reset all
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      if (confirm("Bạn có chắc chắn muốn đặt lại tất cả các câu trả lời?")) {
+        document.querySelectorAll(".q-checkbox").forEach(cb => {
+          cb.checked = false;
+        });
+        document.querySelectorAll(".question-card").forEach(c => {
+          c.classList.remove("active");
+        });
+        updateCount();
+      }
+    });
+
+    // Helper: find Honey & Mumford norm level
+    function getNormLevel(type, score) {
+      const norms = styleProfiles[type].norms;
+      for (let norm of norms) {
+        if (score >= norm.min && score <= norm.max) {
+          return norm;
+        }
+      }
+      return { label: "Trung bình", class: "level-moderate" };
+    }
+
+    // Calculate Scores & Display Result
+    document.getElementById("btn-submit").addEventListener("click", () => {
+      const scores = {
+        activist: 0,
+        reflector: 0,
+        theorist: 0,
+        pragmatist: 0
+      };
+
+      document.querySelectorAll(".q-checkbox:checked").forEach(cb => {
+        if (scores.hasOwnProperty(cb.name)) {
+          scores[cb.name]++;
+        }
+      });
+
+      // Find Dominant style(s)
+      const sortedStyles = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+      const highestScore = scores[sortedStyles[0]];
+      const dominantStyles = sortedStyles.filter(k => scores[k] === highestScore);
+
+      // Dominant Banner
+      const bannerTitle = document.getElementById("dominant-title");
+      const bannerDesc = document.getElementById("dominant-desc");
+      if (dominantStyles.length === 1) {
+        const dom = dominantStyles[0];
+        bannerTitle.textContent = styleProfiles[dom].name;
+        bannerDesc.textContent = styleProfiles[dom].shortDesc;
+      } else {
+        bannerTitle.textContent = dominantStyles.map(k => styleProfiles[k].name).join(" & ");
+        bannerDesc.textContent = "Bạn có phong cách học tập kết hợp đa dạng giữa các nhóm trên, thể hiện tính linh hoạt cao trong nhiều bối cảnh học tập và làm việc khác nhau.";
+      }
+
+      // Render Score Grid
+      const scoreCardsContainer = document.getElementById("score-cards");
+      scoreCardsContainer.innerHTML = "";
+
+      Object.keys(styleProfiles).forEach(key => {
+        const sc = scores[key];
+        const norm = getNormLevel(key, sc);
+        const isDom = dominantStyles.includes(key);
+
+        const card = document.createElement("div");
+        card.className = `score-card ${isDom ? "dominant" : ""}`;
+        card.innerHTML = `
+          <h3>${styleProfiles[key].name}</h3>
+          <div class="score-num">${sc}</div>
+          <div class="score-max">trên 20 điểm</div>
+          <div class="level-badge ${norm.class}">${norm.label}</div>
+        `;
+        scoreCardsContainer.appendChild(card);
+      });
+
+      // Render Detailed Breakdown
+      const breakdownContainer = document.getElementById("detailed-breakdown");
+      breakdownContainer.innerHTML = "";
+
+      dominantStyles.forEach(key => {
+        const profile = styleProfiles[key];
+        const item = document.createElement("div");
+        item.className = "style-detail-item";
+        item.innerHTML = `
+          <strong>✨ Phong cách chủ đạo: ${profile.name}</strong>
+          <p><strong>Thế mạnh:</strong> ${profile.strengths}</p>
+          <p><strong>Học tập tối ưu nhất khi:</strong> ${profile.bestLearning}</p>
+          <p><strong>Rào cản / Cần cải thiện:</strong> ${profile.weaknesses}</p>
+        `;
+        breakdownContainer.appendChild(item);
+      });
+
+      // Draw Radar Chart
+      drawRadarChart(scores);
+
+      // Show Modal
+      document.getElementById("result-modal").style.display = "block";
+    });
+
+    // Close Modal
+    document.getElementById("btn-close-modal").addEventListener("click", () => {
+      document.getElementById("result-modal").style.display = "none";
+    });
+
+    document.getElementById("btn-review").addEventListener("click", () => {
+      document.getElementById("result-modal").style.display = "none";
+    });
+
+    // Print
+    document.getElementById("btn-print").addEventListener("click", () => {
+      window.print();
+    });
+
+    // Pure Canvas Radar Chart
+    function drawRadarChart(scores) {
+      const canvas = document.getElementById("radarChart");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      const radius = 100;
+      const maxScore = 20;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const labels = [
+        "Hành động",
+        "Suy ngẫm",
+        "Lý thuyết",
+        "Thực tế"
+      ];
+      const dataKeys = ["activist", "reflector", "theorist", "pragmatist"];
+      const totalAxes = 4;
+
+      // Draw background grid concentric diamonds
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 1;
+
+      for (let level = 1; level <= 4; level++) {
+        const r = (radius / 4) * level;
+        ctx.beginPath();
+        for (let i = 0; i < totalAxes; i++) {
+          const angle = (Math.PI / 2) * i - Math.PI / 2;
+          const x = centerX + r * Math.cos(angle);
+          const y = centerY + r * Math.sin(angle);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Draw axes
+      for (let i = 0; i < totalAxes; i++) {
+        const angle = (Math.PI / 2) * i - Math.PI / 2;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        // Label text positioning
+        ctx.font = "bold 12px sans-serif";
+        ctx.fillStyle = "#334155";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        const textOffset = 22;
+        const lx = centerX + (radius + textOffset) * Math.cos(angle);
+        const ly = centerY + (radius + textOffset) * Math.sin(angle);
+        ctx.fillText(labels[i], lx, ly);
+      }
+
+      // Plot user data polygon
+      const points = [];
+      for (let i = 0; i < totalAxes; i++) {
+        const angle = (Math.PI / 2) * i - Math.PI / 2;
+        const value = scores[dataKeys[i]] || 0;
+        const r = (value / maxScore) * radius;
+        const x = centerX + r * Math.cos(angle);
+        const y = centerY + r * Math.sin(angle);
+        points.push({ x, y, value });
+      }
+
+      // Fill area
+      ctx.beginPath();
+      points.forEach((p, idx) => {
+        if (idx === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(37, 99, 235, 0.25)";
+      ctx.fill();
+
+      // Stroke outline
+      ctx.strokeStyle = "#2563eb";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Draw data point circles
+      points.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#2563eb";
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+    }
+  </script>
+</body>
+</html>
