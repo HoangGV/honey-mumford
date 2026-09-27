@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cổng Khảo Sát Phong Cách Học Tập | Kolb & Honey-Mumford</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --emerald: #059669;
+      --emerald-hover: #047857;
+      --emerald-light: #ecfdf5;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+      --shadow-hover: 0 20px 25px -5px rgb(0 0 0 / 0.12), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 48px 20px 60px;
+      flex: 1;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 52px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border: 1px solid #e0e7ff;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: clamp(15px, 2vw, 17px);
+      line-height: 1.65;
+    }
+
+    /* Selection Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+
+    .survey-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 30px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .survey-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .survey-card.kolb {
+      border-top: 6px solid var(--primary);
+    }
+
+    .survey-card.honey-mumford {
+      border-top: 6px solid var(--emerald);
+    }
+
+    /* Card Contents */
+    .card-top {
+      margin-bottom: 28px;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kolb .card-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .honey-mumford .card-tag {
+      background: var(--emerald-light);
+      color: var(--emerald);
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* Specs List */
+    .specs-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px dashed var(--border);
+      padding-top: 18px;
+    }
+
+    .specs-list li {
+      font-size: 13.5px;
+      color: #334155;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .specs-list li svg {
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .specs-list strong {
+      color: #0f172a;
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .kolb .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .kolb .btn-action:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    }
+
+    .honey-mumford .btn-action {
+      background: var(--emerald);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+
+    .honey-mumford .btn-action:hover {
+      background: var(--emerald-hover);
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
+    }
+
+    /* Quick Comparison Banner */
+    .comparison-banner {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .comparison-banner h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .comparison-banner p {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      padding: 20px 24px;
+      text-align: center;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Hero Header -->
+    <header class="hero">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Hệ Thống Trắc Nghiệm Tâm Lý Giáo Dục
+      </div>
+      <h1>Khám Phá Phong Cách Học Tập Cá Nhân</h1>
+      <p>
+        Hiểu rõ cách bộ não tiếp nhận và biến kinh nghiệm thành tri thức giúp bạn tối ưu hóa thời gian học tập, phương pháp nghiên cứu và định hướng nghề nghiệp tương lai chính xác nhất.
+      </p>
+    </header>
+
+    <!-- Selection Grid -->
+    <main class="cards-grid">
+      
+      <!-- Card 1: Kolb LSI -->
+      <article class="survey-card kolb">
+        <div class="card-top">
+          <span class="card-tag">Chu trình học tập qua trải nghiệm</span>
+          <h2 class="card-title">Mô hình David Kolb (LSI)</h2>
+          <p class="card-desc">
+            Phân tích cách bạn xử lý thông tin thông qua 2 trục lưỡng cực: <em>Suy nghĩ (Thinking) vs Cảm nhận (Feeling)</em> và <em>Hành động (Doing) vs Quan sát (Watching)</em>.
+          </p>
+
+          <ul class="specs-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span><strong>Cấu trúc:</strong> 12 tình huống xếp hạng bắt buộc (4-3-2-1).</span>
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span><strong>Thời gian:</strong> Khoảng 5 – 7 phút làm bài.</span>
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span><strong>Kết quả:</strong> Xác định 4 phong cách: <em>Hội tụ, Đồng hóa, Phân kỳ, Thích nghi</em> kèm bản đồ tọa độ 4 góc phần tư.</span>
+            </li>
+          </ul>
+        </div>
+
+        <a href="/kolb.html" class="btn-action">
+          Bắt đầu khảo sát Kolb
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </article>
+
+      <!-- Card 2: Honey & Mumford LSQ -->
+      <article class="survey-card honey-mumford">
+        <div class="card-top">
+          <span class="card-tag">Thang đo hành vi học tập</span>
+          <h2 class="card-title">Mô hình Honey & Mumford (LSQ)</h2>
+          <p class="card-desc">
+            Được phát triển từ nền tảng của Kolb nhưng tập trung vào hành vi và thói quen thực tế trong công việc, học tập nhóm và giải quyết tình huống hàng ngày.
+          </p>
+
+          <ul class="specs-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span><strong>Cấu trúc:</strong> 80 câu tự lượng giá nhanh (Đồng ý / Bỏ trống).</span>
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span><strong>Thời gian:</strong> Khoảng 10 – 15 phút làm bài.</span>
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span><strong>Kết quả:</strong> Xác định 4 nhóm: <em>Hành động (Activist), Suy ngẫm (Reflector), Lý thuyết (Theorist), Thực tế (Pragmatist)</em>.</span>
+            </li>
+          </ul>
+        </div>
+
+        <a href="/honey-mumford.html" class="btn-action">
+          Bắt đầu khảo sát Honey & Mumford
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </article>
+
+    </main>
+
+    <!-- Suggestion Note -->
+    <aside class="comparison-banner">
+      <h3>💡 Nên chọn bài khảo sát nào?</h3>
+      <p>
+        Nếu bạn là <strong>học sinh, sinh viên</strong> muốn nhận diện nhanh cách bản thân tiếp thu bài giảng học thuật trong thời gian ngắn, hãy bắt đầu với <strong>Mô hình Kolb (12 câu)</strong>. Nếu bạn muốn đánh giá sâu hơn về <strong>thói quen hành vi, làm việc nhóm và giải quyết vấn đề thực tế</strong> với bảng câu hỏi chi tiết, hãy chọn <strong>Mô hình Honey & Mumford (80 câu)</strong>.
+      </p>
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Bộ công cụ đánh giá phong cách học tập dựa trên cơ sở khoa học của David A. Kolb, Peter Honey & Alan Mumford.
+  </footer>
+
+</body>
+</html>
