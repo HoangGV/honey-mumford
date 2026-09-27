@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khảo Sát Phong Cách Học Tập Kolb (LSI)</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #cbd5e1;
+      
+      /* 4 Kolb Modes Color Palette */
+      --ce-color: #ec4899; /* Pink / Feeling */
+      --ro-color: #3b82f6; /* Blue / Watching */
+      --ac-color: #8b5cf6; /* Purple / Thinking */
+      --ae-color: #10b981; /* Green / Doing */
+
+      --radius: 14px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+      --shadow-lg: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 100px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* Header */
+    .survey-header {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .survey-badge {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .survey-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .survey-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 780px;
+      margin: 0 auto 16px auto;
+    }
+
+    /* Guide Box */
+    .guide-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      text-align: left;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .guide-box strong {
+      color: #0f172a;
+    }
+
+    .rank-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .rank-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+    }
+
+    .rank-pill .badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .badge-4 { background: #4f46e5; }
+    .badge-3 { background: #0284c7; }
+    .badge-2 { background: #d97706; }
+    .badge-1 { background: #64748b; }
+
+    /* Control bar */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .btn-text:hover {
+      text-decoration: underline;
+    }
+
+    /* Question Cards */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s;
+    }
+
+    .q-card.completed {
+      border-color: #86efac;
+    }
+
+    .q-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 12px;
+    }
+
+    .q-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .q-title span {
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .q-status {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .status-incomplete {
+      background: #fef3c7;
+      color: #b45309;
+    }
+    .status-complete {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    /* Option Items */
+    .option-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #f1f5f9;
+      transition: all 0.15s ease;
+    }
+
+    .option-row:hover {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+    }
+
+    .option-text {
+      font-size: 14.5px;
+      color: #334155;
+      flex: 1;
+      font-weight: 500;
+    }
+
+    /* Rank buttons group */
+    .rank-btns {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-rank {
+      width: 38px;
+      height: 38px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn-rank:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-rank.active-4 {
+      background: #4f46e5;
+      border-color: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+    }
+    .btn-rank.active-3 {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+    }
+    .btn-rank.active-2 {
+      background: #d97706;
+      border-color: #d97706;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.35);
+    }
+    .btn-rank.active-1 {
+      background: #64748b;
+      border-color: #64748b;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(100, 116, 139, 0.35);
+    }
+
+    @media (max-width: 640px) {
+      .option-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .rank-btns {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .btn-rank {
+        flex: 1;
+        height: 36px;
+      }
+    }
+
+    /* Sticky Bottom Footer */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 14px 20px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+      z-index: 100;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-wrapper {
+      flex: 1;
+      max-width: 450px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .progress-text strong {
+      color: var(--primary);
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 999px;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-submit:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Modal Result View */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(5px);
+      z-index: 200;
+      overflow-y: auto;
+      padding: 24px 16px;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 880px;
+      margin: 20px auto;
+      box-shadow: var(--shadow-lg);
+      padding: 36px 32px;
+      position: relative;
+      animation: modalFade 0.3s ease;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .btn-close {
+      background: #f1f5f9;
+      border: none;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    .btn-close:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    /* Dominant Style Banner */
+    .style-banner {
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      border: 1.5px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .style-banner .badge {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+
+    .style-banner h3 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #312e81;
+      margin: 6px 0 10px 0;
+    }
+
+    .style-banner p {
+      font-size: 15px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    /* 4 Learning Modes Score Grid */
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .mode-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .mode-card.dominant {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
+    }
+
+    .mode-card h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .mode-card .score {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .mode-card .range {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .axis-coordinates {
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 12px;
+      font-size: 14px;
+      color: #334155;
+    }
+    .axis-coordinates strong {
+      color: #0f172a;
+    }
+
+    /* Charts Area */
+    .charts-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .chart-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* In-depth Recommendations */
+    .analysis-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .analysis-section h4 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary);
+      padding-left: 10px;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .analysis-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .analysis-item {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 14px 16px;
+      border: 1px solid #f1f5f9;
+      font-size: 14px;
+    }
+
+    .analysis-item strong {
+      display: block;
+      color: #1e293b;
+      margin-bottom: 6px;
+      font-size: 14.5px;
+    }
+
+    .analysis-item p {
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    /* Modal Buttons */
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    /* Print Optimization */
+    @media print {
+      body {
+        padding-bottom: 0;
+        background: #ffffff;
+      }
+      .survey-header, .questions-list, .controls-bar, .sticky-footer {
+        display: none !important;
+      }
+      .modal-backdrop {
+        position: static;
+        background: transparent;
+        padding: 0;
+        display: block !important;
+      }
+      .modal-content {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        border: none;
+      }
+      .modal-actions, .btn-close {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="survey-header">
+      <div class="survey-badge">Mô hình học tập qua trải nghiệm (David Kolb)</div>
+      <h1>Thang Đo Phong Cách Học Tập Kolb (LSI)</h1>
+      <p>
+        Bảng khảo sát giúp học sinh và người học xác định chính xác thiên hướng tiếp nhận và xử lý thông tin của mình qua 4 phong cách: 
+        <strong>Phân kỳ (Diverging)</strong>, <strong>Đồng hóa (Assimilating)</strong>, <strong>Hội tụ (Converging)</strong> và <strong>Thích nghi (Accommodating)</strong>.
+      </p>
+
+      <div class="guide-box">
+        <strong>📌 Hướng dẫn xếp hạng theo Kolb:</strong>
+        <p>Mỗi câu gồm 4 nhận định. Với mỗi câu, bạn hãy xếp hạng 4 nhận định bằng các con số từ <strong>4 đến 1</strong> (mỗi số chỉ dùng <strong>duy nhất 1 lần</strong> cho mỗi câu):</p>
+        <div class="rank-legend">
+          <div class="rank-pill"><span class="badge badge-4">4</span> Giống cách học của bạn nhất</div>
+          <div class="rank-pill"><span class="badge badge-3">3</span> Khá giống bạn</div>
+          <div class="rank-pill"><span class="badge badge-2">2</span> Hơi giống bạn</div>
+          <div class="rank-pill"><span class="badge badge-1">1</span> Ít giống cách học của bạn nhất</div>
+        </div>
+        <p style="margin-top: 8px; font-size: 13px; color: #64748b;">
+          <em>* Gợi ý: Hệ thống hỗ trợ tự động hoán đổi số khi bạn nhấp chọn mức đã dùng, không lo bị trùng lặp.</em>
+        </p>
+      </div>
+    </header>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <span>12 câu hỏi tự lượng giá bắt buộc:</span>
+      <button class="btn-text" id="btn-reset" type="button">Làm lại từ đầu</button>
+    </div>
+
+    <!-- Questions Form -->
+    <div class="questions-list" id="questions-container">
+      <!-- Rendered dynamically via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Sticky Bottom Submit Bar -->
+  <aside class="sticky-footer">
+    <div class="footer-inner">
+      <div class="progress-wrapper">
+        <div class="progress-text">
+          <span>Tiến độ khảo sát:</span>
+          <span><strong id="completed-count">0</strong> / 12 câu hoàn chỉnh</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-submit" type="button">Xem Kết Quả Khảo Sát</button>
+    </div>
+  </aside>
+
+  <!-- Result Modal View -->
+  <div class="modal-backdrop" id="result-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Hồ Sơ Phong Cách Học Tập Kolb</h2>
+        <button class="btn-close" id="btn-close-modal" type="button" aria-label="Đóng">&times;</button>
+      </div>
+
+      <!-- Dominant Style Banner -->
+      <div class="style-banner" id="style-banner">
+        <div class="badge">Phong cách học tập chủ đạo của bạn</div>
+        <h3 id="style-title">Đang phân tích...</h3>
+        <p id="style-summary">Mô tả tóm tắt...</p>
+      </div>
+
+      <!-- 4 Learning Modes Scores -->
+      <div class="modes-grid" id="modes-grid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Continuum Coordinates -->
+      <div class="axis-coordinates" id="axis-coordinates">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- 2 Visual Charts -->
+      <div class="charts-container">
+        <div class="chart-card">
+          <h4>1. Bản đồ 4 Góc phần tư Kolb (Quadrant Plot)</h4>
+          <canvas id="quadrantCanvas" width="340" height="340"></canvas>
+        </div>
+        <div class="chart-card">
+          <h4>2. Chu trình học tập 4 giai đoạn (Diamond Kite)</h4>
+          <canvas id="kiteCanvas" width="340" height="340"></canvas>
+        </div>
+      </div>
+
+      <!-- In-depth Analysis For Students -->
+      <div class="analysis-section" id="analysis-section">
+        <h4>Chi Tiết Năng Lực & Khuyến Nghị Học Tập Dành Cho Bạn</h4>
+        <div class="analysis-grid" id="analysis-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div class="modal-actions">
+        <button class="btn-secondary" id="btn-print" type="button">🖨️ In / Lưu PDF Báo Cáo</button>
+        <button class="btn-submit" id="btn-review" type="button">Xem lại các lựa chọn</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 12 Standard Kolb Learning Style Inventory Items with balanced option scrambled orders
+    const kolbData = [
+      {
+        id: 1,
+        stem: "Khi tiếp cận một bài học hoặc kiến thức mới:",
+        options: [
+          { type: "CE", text: "Tôi thích hòa mình vào cảm xúc và trải nghiệm trực tiếp." },
+          { type: "RO", text: "Tôi thích chăm chú quan sát và lắng nghe kỹ lưỡng." },
+          { type: "AC", text: "Tôi thích suy ngẫm về các ý tưởng và khái niệm cốt lõi." },
+          { type: "AE", text: "Tôi thích bắt tay vào thực hành và làm thử ngay." }
+        ]
+      },
+      {
+        id: 2,
+        stem: "Tôi học tập đạt hiệu quả cao nhất khi:",
+        options: [
+          { type: "RO", text: "Tôi lắng nghe và quan sát mọi việc thật cẩn thận." },
+          { type: "AC", text: "Tôi dựa vào tư duy logic và lập luận chặt chẽ." },
+          { type: "AE", text: "Tôi nỗ lực hành động để hoàn thành nhiệm vụ cụ thể." },
+          { type: "CE", text: "Tôi tin tưởng vào trực giác và cảm nhận của bản thân." }
+        ]
+      },
+      {
+        id: 3,
+        stem: "Trong quá trình giải quyết vấn đề học tập:",
+        options: [
+          { type: "AC", text: "Tôi có xu hướng phân tích, lý giải mọi việc theo lý tính." },
+          { type: "CE", text: "Tôi để cảm xúc và sự đồng điệu dẫn dắt phản ứng của mình." },
+          { type: "AE", text: "Tôi sẵn sàng nhận trách nhiệm thực thi và bắt tay giải quyết." },
+          { type: "RO", text: "Tôi giữ thái độ trầm tĩnh, kín đáo để quan sát mọi góc cạnh." }
+        ]
+      },
+      {
+        id: 4,
+        stem: "Cách thức tôi tiếp thu kiến thức hiệu quả nhất là qua:",
+        options: [
+          { type: "CE", text: "Cảm nhận trực quan & cảm xúc (Feeling)." },
+          { type: "RO", text: "Quan sát phản tỉnh & lắng nghe (Watching)." },
+          { type: "AC", text: "Suy nghĩ logic & phân tích (Thinking)." },
+          { type: "AE", text: "Thực hành, trải nghiệm & hành động (Doing)." }
+        ]
+      },
+      {
+        id: 5,
+        stem: "Khi đứng trước một chủ đề học tập hoàn toàn mới:",
+        options: [
+          { type: "AE", text: "Tôi muốn trực tiếp thử nghiệm xem nó hoạt động thế nào trong thực tế." },
+          { type: "CE", text: "Tôi cởi mở đón nhận và háo hức với những trải nghiệm mới mẻ." },
+          { type: "RO", text: "Tôi lùi lại để nhìn nhận vấn đề từ nhiều góc độ khác nhau." },
+          { type: "AC", text: "Tôi thích chia nhỏ vấn đề thành từng phần để phân tích cấu trúc." }
+        ]
+      },
+      {
+        id: 6,
+        stem: "Bản thân tôi nhận thấy mình là người học:",
+        options: [
+          { type: "RO", text: "Kiên nhẫn, điềm đạm và chú trọng quan sát." },
+          { type: "AC", text: "Duy lý, có tư duy logic và suy nghĩ hệ thống." },
+          { type: "CE", text: "Giàu trực giác, nhạy bén và thấu cảm." },
+          { type: "AE", text: "Năng động, thực tế và luôn sẵn sàng hành động." }
+        ]
+      },
+      {
+        id: 7,
+        stem: "Tôi thu nạp kiến thức sâu sắc nhất từ:",
+        options: [
+          { type: "CE", text: "Sự tương tác và mối quan hệ gần gũi với bạn bè, thầy cô." },
+          { type: "AE", text: "Cơ hội được tự mình thao tác và ứng dụng ngay." },
+          { type: "AC", text: "Các hệ thống lý thuyết có cơ sở lập luận khoa học vững chắc." },
+          { type: "RO", text: "Việc quan sát người khác thao tác hoặc theo dõi hiện tượng thực tế." }
+        ]
+      },
+      {
+        id: 8,
+        stem: "Khi tham gia vào một dự án hay nhiệm vụ học tập:",
+        options: [
+          { type: "AC", text: "Tôi thích thú với việc xây dựng các ý tưởng và mô hình giải thích." },
+          { type: "RO", text: "Tôi dành thời gian cân nhắc cẩn trọng trước khi đưa ra quyết định." },
+          { type: "CE", text: "Tôi cảm nhận sự gắn kết cá nhân và đặt nhiều tâm huyết vào đó." },
+          { type: "AE", text: "Tôi nóng lòng muốn nhìn thấy kết quả cụ thể từ hành động của mình." }
+        ]
+      },
+      {
+        id: 9,
+        stem: "Tôi ghi nhớ và làm chủ kiến thức tốt nhất khi:",
+        options: [
+          { type: "AE", text: "Tôi được tự mình thao tác và rút ra bài học từ quá trình làm thử." },
+          { type: "RO", text: "Tôi dựa vào những gì mắt thấy tai nghe và sự quan sát cẩn thận." },
+          { type: "AC", text: "Tôi hệ thống hóa được các định lý, quy luật và ý tưởng trừu tượng." },
+          { type: "CE", text: "Tôi gắn kết bài học với cảm nhận và trải nghiệm cá nhân." }
+        ]
+      },
+      {
+        id: 10,
+        stem: "Trong tập thể học tập, vai trò tự nhiên của tôi là:",
+        options: [
+          { type: "CE", text: "Người cởi mở, biết lắng nghe cảm xúc và dễ đồng cảm." },
+          { type: "RO", text: "Người thận trọng, điềm tĩnh suy xét trước mọi luồng ý kiến." },
+          { type: "AC", text: "Người duy lý, luôn đòi hỏi sự logic và tính xác đáng của thông tin." },
+          { type: "AE", text: "Người thực tế, đốc thúc hành động và tập trung vào kết quả." }
+        ]
+      },
+      {
+        id: 11,
+        stem: "Phương pháp tiếp cận bài học quen thuộc của tôi là:",
+        options: [
+          { type: "RO", text: "Đứng ở vị trí quan sát để nhìn nhận toàn cảnh bức tranh." },
+          { type: "AE", text: "Vận dụng ngay vào bài tập hoặc hành động cụ thể." },
+          { type: "CE", text: "Hòa mình tham gia tích cực vào các hoạt động trải nghiệm." },
+          { type: "AC", text: "Đánh giá, phản biện và xây dựng khung lý thuyết cho vấn đề." }
+        ]
+      },
+      {
+        id: 12,
+        stem: "Tôi phát huy tối đa năng lực học tập khi:",
+        options: [
+          { type: "AC", text: "Được tìm hiểu sâu về nguyên lý cốt lõi và các mô hình học thuật." },
+          { type: "AE", text: "Kiến thức có tính thực dụng cao và có thể áp dụng ngay lập tức." },
+          { type: "RO", text: "Được cho đủ thời gian suy ngẫm mà không bị thúc ép ra quyết định." },
+          { type: "CE", text: "Môi trường học thoải mái, truyền cảm hứng và giàu tính tương tác." }
+        ]
+      }
+    ];
+
+    // Kolb Profiles metadata
+    const kolbStyles = {
+      converging: {
+        name: "Hội Tụ (Converging)",
+        enName: "Converger",
+        modePair: "AC (Tư duy trừu tượng) + AE (Thử nghiệm tích cực)",
+        coreTag: "Suy nghĩ & Hành động (Thinking & Doing)",
+        summary: "Bạn có thế mạnh xuất sắc trong việc tìm kiếm các ứng dụng thực tiễn của lý thuyết và ý tưởng khoa học. Bạn tư duy thực dụng, suy luận giả thuyết - diễn dịch, quyết đoán và giải quyết vấn đề kỹ thuật cực kỳ hiệu quả.",
+        strengths: "Tư duy logic sắc bén, kỹ năng giải quyết bài toán kỹ thuật cao, ra quyết định dứt khoát dựa trên giải pháp tối ưu.",
+        learningEnv: "Học qua dự án (PBL), làm việc trong phòng thí nghiệm, bài tập mô phỏng, tình huống xử lý sự cố có đáp án rõ ràng.",
+        blindSpots: "Có thể vội vã đưa ra quyết định trước khi nhìn hết bức tranh toàn cảnh; ít để tâm đến yếu tố cảm xúc và xã hội trong nhóm.",
+        careers: "Kỹ thuật, Công nghệ thông tin, Khoa học máy tính, Cơ khí - Tự động hóa, Quản lý dự án, Y khoa ngoại khoa."
+      },
+      assimilating: {
+        name: "Đồng Hóa (Assimilating)",
+        enName: "Assimilator",
+        modePair: "AC (Tư duy trừu tượng) + RO (Quan sát phản tỉnh)",
+        coreTag: "Suy nghĩ & Quan sát (Thinking & Watching)",
+        summary: "Bạn có năng lực vượt trội trong việc tiếp nhận khối lượng thông tin rộng lớn và đúc kết thành các mô hình lý thuyết chặt chẽ, súc tích. Bạn coi trọng tính nhất quán logic và say mê với các ý tưởng trừu tượng hơn là ứng dụng thực tế tức thì.",
+        strengths: "Khả năng phân tích sâu, xâu chuỗi thông tin phức tạp, tư duy quy nạp, xây dựng các học thuyết và cấu trúc khái niệm.",
+        learningEnv: "Đọc tài liệu chuyên khảo, nghe thuyết giảng học thuật có tổ chức tốt, tự nghiên cứu, khám phá các mô hình toán học và khoa học.",
+        blindSpots: "Dễ bị sa đà vào lý thuyết suông; đôi khi xem nhẹ tính khả thi thực tế hoặc gặp khó khăn khi phải chuyển giao ý tưởng thành hành động nhanh.",
+        careers: "Nghiên cứu khoa học, Toán học, Vật lý lý thuyết, Hoạch định chiến lược, Phân tích dữ liệu, Kinh tế học vĩ mô."
+      },
+      diverging: {
+        name: "Phân Kỳ (Diverging)",
+        enName: "Diverger",
+        modePair: "CE (Trải nghiệm cụ thể) + RO (Quan sát phản tỉnh)",
+        coreTag: "Cảm nhận & Quan sát (Feeling & Watching)",
+        summary: "Bạn có khả năng tuyệt vời trong việc nhìn nhận các tình huống cụ thể từ nhiều góc nhìn đa chiều. Bạn giàu trí tưởng tượng, nhạy cảm với cảm xúc, thấu hiểu con người và luôn ngập tràn những ý tưởng sáng tạo đột phá.",
+        strengths: "Trí tưởng tượng phong phú, kỹ năng bão não (brainstorming), tư duy sáng tạo nghệ thuật, thấu hiểu tâm lý và lắng nghe.",
+        learningEnv: "Thảo luận nhóm nhỏ, đóng vai (role-play), học qua tương tác nhân văn, các buổi thảo luận cởi mở nhận phản hồi cá nhân.",
+        blindSpots: "Dễ bị ngợp trước quá nhiều ý tưởng; thường do dự và mất nhiều thời gian để đưa ra quyết định cuối cùng.",
+        careers: "Nghệ thuật, Thiết kế, Văn học, Tâm lý học, Giáo dục, Công tác xã hội, Truyền thông & Quan hệ công chúng."
+      },
+      accommodating: {
+        name: "Thích Nghi (Accommodating)",
+        enName: "Accommodator",
+        modePair: "CE (Trải nghiệm cụ thể) + AE (Thử nghiệm tích cực)",
+        coreTag: "Cảm nhận & Hành động (Feeling & Doing)",
+        summary: "Bạn học tập tốt nhất bằng cách 'nhúng mình' trực tiếp vào hành động thực tế, triển khai kế hoạch và dẫn thân vào các trải nghiệm mới. Bạn linh hoạt, tùy cơ ứng biến và tin vào trực giác nhạy bén của mình hơn là các phân tích sách vở khô khan.",
+        strengths: "Khả năng thích ứng tức thì với sự thay đổi, tinh thần dám mạo hiểm, năng lượng hành động cao, kỹ năng giải quyết tình huống phát sinh tại chỗ.",
+        learningEnv: "Thực hành tại chỗ, trải nghiệm thực địa (fieldwork), thử và sai trực tiếp (trial-and-error), làm việc theo nhóm năng động.",
+        blindSpots: "Có xu hướng làm trước nghĩ sau; dễ mất kiên nhẫn với các kế hoạch chi tiết hoặc phân tích số liệu lý thuyết bài bản.",
+        careers: "Kinh doanh, Tiếp thị (Marketing), Khởi nghiệp (Startup), Quản lý điều hành, Bán hàng, Thể thao, Tổ chức sự kiện."
+      },
+      balanced: {
+        name: "Cân Bằng Đa Phương Thức (Balanced)",
+        enName: "Balanced Profile",
+        modePair: "Sự dung hòa giữa Cảm nhận - Tư duy và Hành động - Quan sát",
+        coreTag: "Linh hoạt đa phong cách",
+        summary: "Bạn có điểm số nằm rất gần điểm trung tâm của cả hai trục. Điều này cho thấy bạn là người học có tính thích nghi rất cao, biết linh hoạt chuyển đổi giữa tư duy lý thuyết và hành động thực tế tùy theo yêu cầu của từng môn học.",
+        strengths: "Linh hoạt, toàn diện, dễ hòa nhập với nhiều phong cách giảng dạy khác nhau.",
+        learningEnv: "Môi trường học tập kết hợp (Blended Learning): vừa có lý thuyết vừa có bài tập thực hành thực tế.",
+        blindSpots: "Đôi khi thiếu sự nổi trội chuyên biệt trong một lĩnh vực cụ thể nếu không tự đào sâu.",
+        careers: "Quản trị tổng quát, Tư vấn quản lý, Đào tạo & Phát triển nhân lực, Giáo viên đa môn."
+      }
+    };
+
+    // State management: 12 arrays of size 4
+    // state[qIndex] = [rankForOpt0, rankForOpt1, rankForOpt2, rankForOpt3]
+    const state = Array.from({ length: 12 }, () => [null, null, null, null]);
+
+    // DOM Elements
+    const qContainer = document.getElementById("questions-container");
+    const countSpan = document.getElementById("completed-count");
+    const progressFill = document.getElementById("progress-fill");
+
+    // Render questions
+    kolbData.forEach((q, qIdx) => {
+      const card = document.createElement("div");
+      card.className = "q-card";
+      card.id = `q-card-${qIdx}`;
+
+      // Card Header
+      const header = document.createElement("div");
+      header.className = "q-card-header";
+
+      const title = document.createElement("div");
+      title.className = "q-title";
+      title.innerHTML = `<span>Câu ${q.id}.</span> ${q.stem}`;
+
+      const status = document.createElement("div");
+      status.className = "q-status status-incomplete";
+      status.id = `q-status-${qIdx}`;
+      status.textContent = "Chưa xếp đủ (4, 3, 2, 1)";
+
+      header.appendChild(title);
+      header.appendChild(status);
+      card.appendChild(header);
+
+      // Options List
+      const optList = document.createElement("div");
+      optList.className = "option-list";
+
+      q.options.forEach((opt, optIdx) => {
+        const row = document.createElement("div");
+        row.className = "option-row";
+
+        const text = document.createElement("div");
+        text.className = "option-text";
+        text.textContent = opt.text;
+
+        const btnsGroup = document.createElement("div");
+        btnsGroup.className = "rank-btns";
+
+        [4, 3, 2, 1].forEach(val => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn-rank";
+          btn.setAttribute("data-val", val);
+          btn.textContent = val;
+          btn.title = `Gán mức ${val}`;
+
+          btn.addEventListener("click", () => {
+            handleRankSelection(qIdx, optIdx, val);
+          });
+
+          btnsGroup.appendChild(btn);
+        });
+
+        row.appendChild(text);
+        row.appendChild(btnsGroup);
+        optList.appendChild(row);
+      });
+
+      card.appendChild(optList);
+      qContainer.appendChild(card);
+    });
+
+    // Smart Swap & Selection Handler
+    function handleRankSelection(qIdx, optIdx, val) {
+      const currentVal = state[qIdx][optIdx];
+
+      if (currentVal === val) {
+        // Toggle off if already selected
+        state[qIdx][optIdx] = null;
+      } else {
+        // Check if another option has this value -> swap!
+        const prevHolder = state[qIdx].findIndex((v, idx) => v === val && idx !== optIdx);
+        if (prevHolder !== -1) {
+          state[qIdx][prevHolder] = currentVal;
+        }
+        state[qIdx][optIdx] = val;
+      }
+
+      updateQuestionUI(qIdx);
+      updateGlobalProgress();
+    }
+
+    // Update single card UI
+    function updateQuestionUI(qIdx) {
+      const card = document.getElementById(`q-card-${qIdx}`);
+      const status = document.getElementById(`q-status-${qIdx}`);
+      const rows = card.querySelectorAll(".option-row");
+
+      const ranks = state[qIdx];
+      const usedValues = ranks.filter(v => v !== null);
+      const isComplete = [1, 2, 3, 4].every(v => ranks.includes(v));
+
+      // Update button active classes
+      rows.forEach((row, optIdx) => {
+        const btns = row.querySelectorAll(".btn-rank");
+        const assignedVal = ranks[optIdx];
+        btns.forEach(btn => {
+          const btnVal = parseInt(btn.getAttribute("data-val"), 10);
+          btn.className = "btn-rank";
+          if (assignedVal === btnVal) {
+            btn.classList.add(`active-${btnVal}`);
+          }
+        });
+      });
+
+      // Update card status
+      if (isComplete) {
+        card.classList.add("completed");
+        status.className = "q-status status-complete";
+        status.textContent = "✓ Đã xếp đủ 4 mức";
+      } else {
+        card.classList.remove("completed");
+        status.className = "q-status status-incomplete";
+        const missing = [4, 3, 2, 1].filter(v => !ranks.includes(v));
+        status.textContent = `Thiếu mức: ${missing.join(", ")}`;
+      }
+    }
+
+    // Global Progress Update
+    function updateGlobalProgress() {
+      let completedCount = 0;
+      state.forEach(ranks => {
+        if ([1, 2, 3, 4].every(v => ranks.includes(v))) {
+          completedCount++;
+        }
+      });
+
+      countSpan.textContent = completedCount;
+      const pct = (completedCount / 12) * 100;
+      progressFill.style.width = `${pct}%`;
+    }
+
+    // Reset Survey
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      if (confirm("Bạn có chắc chắn muốn đặt lại tất cả câu trả lời?")) {
+        for (let i = 0; i < 12; i++) {
+          state[i] = [null, null, null, null];
+          updateQuestionUI(i);
+        }
+        updateGlobalProgress();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    // Submit & Validate
+    document.getElementById("btn-submit").addEventListener("click", () => {
+      const incompleteIdx = state.findIndex(ranks => ![1, 2, 3, 4].every(v => ranks.includes(v)));
+
+      if (incompleteIdx !== -1) {
+        alert(`Bạn chưa hoàn thành Câu ${incompleteIdx + 1}. Vui lòng xếp hạng đủ các mức từ 4 đến 1 cho câu này!`);
+        const target = document.getElementById(`q-card-${incompleteIdx}`);
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.style.transition = "box-shadow 0.3s";
+        target.style.boxShadow = "0 0 0 3px #f43f5e";
+        setTimeout(() => { target.style.boxShadow = ""; }, 1800);
+        return;
+      }
+
+      // All 12 completed! Calculate Scores
+      calculateAndShowResults();
+    });
+
+    // Score Calculation & Result Presentation
+    function calculateAndShowResults() {
+      const scores = { CE: 0, RO: 0, AC: 0, AE: 0 };
+
+      kolbData.forEach((q, qIdx) => {
+        q.options.forEach((opt, optIdx) => {
+          const rank = state[qIdx][optIdx];
+          scores[opt.type] += rank;
+        });
+      });
+
+      // 2 Dialectic Axes Coordinates
+      const X = scores.AE - scores.RO; // Processing Continuum: Doing vs Watching (-36 to +36)
+      const Y = scores.AC - scores.CE; // Perception Continuum: Thinking vs Feeling (-36 to +36)
+
+      // Determine Style
+      let styleKey = "";
+      if (Math.abs(X) <= 2 && Math.abs(Y) <= 2) {
+        styleKey = "balanced";
+      } else if (X > 0 && Y > 0) {
+        styleKey = "converging";
+      } else if (X <= 0 && Y > 0) {
+        styleKey = "assimilating";
+      } else if (X <= 0 && Y <= 0) {
+        styleKey = "diverging";
+      } else {
+        styleKey = "accommodating";
+      }
+
+      const dominant = kolbStyles[styleKey];
+
+      // Update Banner
+      document.getElementById("style-title").textContent = dominant.name;
+      document.getElementById("style-summary").textContent = dominant.summary;
+
+      // Update Modes Score Grid
+      const modesGrid = document.getElementById("modes-grid");
+      modesGrid.innerHTML = `
+        <div class="mode-card ${styleKey==='diverging'||styleKey==='accommodating'?'dominant':''}">
+          <h4>Trải Nghiệm Cụ Thể (CE)</h4>
+          <div class="score" style="color: var(--ce-color);">${scores.CE}</div>
+          <div class="range">Thang 12 - 48 (Cảm nhận)</div>
+        </div>
+        <div class="mode-card ${styleKey==='diverging'||styleKey==='assimilating'?'dominant':''}">
+          <h4>Quan Sát Phản Tỉnh (RO)</h4>
+          <div class="score" style="color: var(--ro-color);">${scores.RO}</div>
+          <div class="range">Thang 12 - 48 (Quan sát)</div>
+        </div>
+        <div class="mode-card ${styleKey==='converging'||styleKey==='assimilating'?'dominant':''}">
+          <h4>Khái Niệm Hóa Trừu Tượng (AC)</h4>
+          <div class="score" style="color: var(--ac-color);">${scores.AC}</div>
+          <div class="range">Thang 12 - 48 (Tư duy)</div>
+        </div>
+        <div class="mode-card ${styleKey==='converging'||styleKey==='accommodating'?'dominant':''}">
+          <h4>Thử Nghiệm Tích Cực (AE)</h4>
+          <div class="score" style="color: var(--ae-color);">${scores.AE}</div>
+          <div class="range">Thang 12 - 48 (Hành động)</div>
+        </div>
+      `;
+
+      // Update Axis Coordinates
+      const axisCoords = document.getElementById("axis-coordinates");
+      const xOrientation = X > 0 ? "Thiên về Hành động (Doing)" : (X < 0 ? "Thiên về Quan sát (Watching)" : "Cân bằng");
+      const yOrientation = Y > 0 ? "Thiên về Suy nghĩ logic (Thinking)" : (Y < 0 ? "Thiên về Cảm xúc trực giác (Feeling)" : "Cân bằng");
+
+      axisCoords.innerHTML = `
+        <div>📐 <strong>Tọa độ Trục Hoành X (AE - RO):</strong> ${X > 0 ? '+' + X : X} &rarr; <em>${xOrientation}</em></div>
+        <div>📐 <strong>Tọa độ Trục Tung Y (AC - CE):</strong> ${Y > 0 ? '+' + Y : Y} &rarr; <em>${yOrientation}</em></div>
+      `;
+
+      // Update In-depth Recommendations
+      const analysisGrid = document.getElementById("analysis-grid");
+      analysisGrid.innerHTML = `
+        <div class="analysis-item">
+          <strong>💎 Điểm mạnh nổi trội:</strong>
+          <p>${dominant.strengths}</p>
+        </div>
+        <div class="analysis-item">
+          <strong>🎯 Môi trường & Phương pháp học hiệu quả nhất:</strong>
+          <p>${dominant.learningEnv}</p>
+        </div>
+        <div class="analysis-item">
+          <strong>⚠️ Điểm mù & Rào cản cần chú ý cải thiện:</strong>
+          <p>${dominant.blindSpots}</p>
+        </div>
+        <div class="analysis-item">
+          <strong>💼 Nhóm ngành & Lĩnh vực phù hợp:</strong>
+          <p>${dominant.careers}</p>
+        </div>
+      `;
+
+      // Draw Charts
+      drawQuadrantChart(X, Y);
+      drawKiteChart(scores);
+
+      // Show Modal
+      document.getElementById("result-modal").style.display = "block";
+    }
+
+    // Modal Control
+    document.getElementById("btn-close-modal").addEventListener("click", () => {
+      document.getElementById("result-modal").style.display = "none";
+    });
+    document.getElementById("btn-review").addEventListener("click", () => {
+      document.getElementById("result-modal").style.display = "none";
+    });
+    document.getElementById("btn-print").addEventListener("click", () => {
+      window.print();
+    });
+
+    // 1. Draw 4-Quadrant Scatter Plot
+    function drawQuadrantChart(X, Y) {
+      const canvas = document.getElementById("quadrantCanvas");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const limit = 36;
+      const plotRadius = 130;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Background Quadrant Tints
+      // Top-Left (Assimilating)
+      ctx.fillStyle = "rgba(99, 102, 241, 0.08)";
+      ctx.fillRect(cx - plotRadius, cy - plotRadius, plotRadius, plotRadius);
+
+      // Top-Right (Converging)
+      ctx.fillStyle = "rgba(16, 185, 129, 0.08)";
+      ctx.fillRect(cx, cy - plotRadius, plotRadius, plotRadius);
+
+      // Bottom-Left (Diverging)
+      ctx.fillStyle = "rgba(245, 158, 11, 0.08)";
+      ctx.fillRect(cx - plotRadius, cy, plotRadius, plotRadius);
+
+      // Bottom-Right (Accommodating)
+      ctx.fillStyle = "rgba(236, 72, 153, 0.08)";
+      ctx.fillRect(cx, cy, plotRadius, plotRadius);
+
+      // Grid Axes
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 1.5;
+
+      // X Axis
+      ctx.beginPath();
+      ctx.moveTo(cx - plotRadius - 15, cy);
+      ctx.lineTo(cx + plotRadius + 15, cy);
+      ctx.stroke();
+
+      // Y Axis
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - plotRadius - 15);
+      ctx.lineTo(cx, cy + plotRadius + 15);
+      ctx.stroke();
+
+      // Quadrant Labels
+      ctx.font = "bold 11px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // Top-Left
+      ctx.fillStyle = "#4338ca";
+      ctx.fillText("ĐỒNG HÓA", cx - plotRadius / 2, cy - plotRadius / 2 - 8);
+      ctx.font = "10px sans-serif";
+      ctx.fillText("(Assimilating)", cx - plotRadius / 2, cy - plotRadius / 2 + 8);
+
+      // Top-Right
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillStyle = "#047857";
+      ctx.fillText("HỘI TỤ", cx + plotRadius / 2, cy - plotRadius / 2 - 8);
+      ctx.font = "10px sans-serif";
+      ctx.fillText("(Converging)", cx + plotRadius / 2, cy - plotRadius / 2 + 8);
+
+      // Bottom-Left
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillStyle = "#b45309";
+      ctx.fillText("PHÂN KỲ", cx - plotRadius / 2, cy + plotRadius / 2 - 8);
+      ctx.font = "10px sans-serif";
+      ctx.fillText("(Diverging)", cx - plotRadius / 2, cy + plotRadius / 2 + 8);
+
+      // Bottom-Right
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillStyle = "#be185d";
+      ctx.fillText("THÍCH NGHI", cx + plotRadius / 2, cy + plotRadius / 2 - 8);
+      ctx.font = "10px sans-serif";
+      ctx.fillText("(Accommodating)", cx + plotRadius / 2, cy + plotRadius / 2 + 8);
+
+      // Axis Extremes Labels
+      ctx.font = "bold 10px sans-serif";
+      ctx.fillStyle = "#64748b";
+      ctx.fillText("+Y: TƯ DUY (AC)", cx, cy - plotRadius - 22);
+      ctx.fillText("-Y: CẢM NHẬN (CE)", cx, cy + plotRadius + 22);
+      ctx.fillText("-X: QUAN SÁT (RO)", cx - plotRadius - 10, cy - 10);
+      ctx.fillText("+X: HÀNH ĐỘNG (AE)", cx + plotRadius + 10, cy - 10);
+
+      // Map User Point
+      const userPx = cx + (X / limit) * plotRadius;
+      const userPy = cy - (Y / limit) * plotRadius; // Invert Y in canvas
+
+      // Draw Glowing Target Point
+      ctx.beginPath();
+      ctx.arc(userPx, userPy, 14, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(79, 70, 229, 0.25)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(userPx, userPy, 6, 0, Math.PI * 2);
+      ctx.fillStyle = "#4f46e5";
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Dot label
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(`Bạn (${X > 0 ? '+' + X : X}, ${Y > 0 ? '+' + Y : Y})`, userPx, userPy - 12);
+    }
+
+    // 2. Draw Experiential Cycle Diamond / Kite
+    function drawKiteChart(scores) {
+      const canvas = document.getElementById("kiteCanvas");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const maxR = 120;
+      const minScore = 12;
+      const maxScore = 48;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid Diamonds
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 1;
+
+      for (let level = 1; level <= 4; level++) {
+        const r = (maxR / 4) * level;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - r); // Top (CE)
+        ctx.lineTo(cx + r, cy); // Right (AE)
+        ctx.lineTo(cx, cy + r); // Bottom (AC)
+        ctx.lineTo(cx - r, cy); // Left (RO)
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Draw Main Axes
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - maxR);
+      ctx.lineTo(cx, cy + maxR);
+      ctx.moveTo(cx - maxR, cy);
+      ctx.lineTo(cx + maxR, cy);
+      ctx.stroke();
+
+      // Function to map score to radius
+      function getR(score) {
+        const normalized = Math.max(0, Math.min(1, (score - minScore) / (maxScore - minScore)));
+        return 20 + normalized * (maxR - 20);
+      }
+
+      const pCE = { x: cx, y: cy - getR(scores.CE) };
+      const pAE = { x: cx + getR(scores.AE), y: cy };
+      const pAC = { x: cx, y: cy + getR(scores.AC) };
+      const pRO = { x: cx - getR(scores.RO), y: cy };
+
+      // Fill User Diamond
+      ctx.beginPath();
+      ctx.moveTo(pCE.x, pCE.y);
+      ctx.lineTo(pAE.x, pAE.y);
+      ctx.lineTo(pAC.x, pAC.y);
+      ctx.lineTo(pRO.x, pRO.y);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(79, 70, 229, 0.25)";
+      ctx.fill();
+      ctx.strokeStyle = "#4f46e5";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Points and Labels
+      const vertices = [
+        { p: pCE, label: `CE (${scores.CE})`, color: "#ec4899", tx: cx, ty: cy - maxR - 12 },
+        { p: pAE, label: `AE (${scores.AE})`, color: "#10b981", tx: cx + maxR + 8, ty: cy + 14 },
+        { p: pAC, label: `AC (${scores.AC})`, color: "#8b5cf6", tx: cx, ty: cy + maxR + 14 },
+        { p: pRO, label: `RO (${scores.RO})`, color: "#3b82f6", tx: cx - maxR - 8, ty: cy + 14 }
+      ];
+
+      vertices.forEach(v => {
+        // Dot
+        ctx.beginPath();
+        ctx.arc(v.p.x, v.p.y, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = v.color;
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Label
+        ctx.font = "bold 11px sans-serif";
+        ctx.fillStyle = "#1e293b";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(v.label, v.tx, v.ty);
+      });
+    }
+  </script>
+</body>
+</html>
